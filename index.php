@@ -1,14 +1,30 @@
 <?php
-    function create_tile() {
-        return "<select>
-            <option>Select</option>
-            <option value='0'>0</option>
-            <option value='x'>x</option>
-        </select>";
+    function create_tile($value) {
+        $o="";
+        if($value == 0 || $value == 1) {
+            $o = "<select disabled='disabled'>";
+        }else{
+            $o = "<select>";
+        }
+        $o .= " <option>Select</option>";
+        if($value == 0){
+            $o .= "<option selected='selected'>0</option>";
+        } else{
+             $o .= "<option>0</option>";
+        }
+
+        if($value == 1){
+            $o .= "<option selected='selected'>x</option>";
+        } else{
+             $o .= "<option>x</option>";
+        }
+        $o .= "</select>";
+
+        return $o;
     }
 
     $board = [
-        [3,3,3],
+        [1,0,3],
         [3,3,3],
         [3,3,3]
     ]
@@ -28,13 +44,13 @@
         <caption>Play Now!</caption>
         <tbody>
             <?php foreach($board as $row): ?>
-            <tr>
-            <?php foreach($row as $tile): ?>
-                <td>
-                    <?php  echo create_tile($tile) ?>
-                </td>
-            <?php endforeach; ?>
-            </tr>
+                <tr>
+                    <?php foreach($row as $tile): ?>
+                        <td>
+                            <?php  echo create_tile($tile) ?>
+                        </td>
+                    <?php endforeach; ?>
+                </tr>
             <?php endforeach; ?>
         </tbody>
     </table>
