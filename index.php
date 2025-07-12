@@ -1,10 +1,18 @@
 <?php
-    function create_tile($value) {
+
+    $board = [
+        [1,0,3],
+        [3,3,3],
+        [3,3,3]
+    ];
+
+    function create_tile($value, $id) {
         $o="";
+        $name = "row_" . $id;
         if($value == 0 || $value == 1) {
-            $o = "<select disabled='disabled'>";
+            $o = "<select  name='".$name."' disabled='disabled'>";
         }else{
-            $o = "<select>";
+            $o = "<select name='".$name."'>";
         }
         $o .= " <option>Select</option>";
         if($value == 0){
@@ -23,11 +31,9 @@
         return $o;
     }
 
-    $board = [
-        [1,0,3],
-        [3,3,3],
-        [3,3,3]
-    ]
+    if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['play'])){
+        $board = isset($_POST['board']) ? json_encode($_POST['board']) : [];
+    }
 ?>
 
 
@@ -40,19 +46,23 @@
 </head>
 <body>
     <h1>Tic-Tac-Toe Game</h1>
-    <table class="tic-tac-table" border="1">
-        <caption>Play Now!</caption>
-        <tbody>
-            <?php foreach($board as $row): ?>
-                <tr>
-                    <?php foreach($row as $tile): ?>
-                        <td>
-                            <?php  echo create_tile($tile) ?>
-                        </td>
-                    <?php endforeach; ?>
-                </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
+    <form method="post">
+        <input type="hidden" name="board" value="<?php json_encode($board); ?>">
+        <table class="tic-tac-table" border="1">
+            <caption>Play Now!</caption>
+            <tbody>
+                <?php $count=0; foreach($board as $row): ?>
+                    <tr>
+                        <?php foreach($row as $tile): ?>
+                            <td>
+                                <?php  echo create_tile($tile, $count) ?>
+                            </td>
+                        <?php $count++; endforeach; ?>
+                    </tr>
+                <?php  endforeach; ?>
+            </tbody>
+            <button name="play">End Turn</button>
+        </table>
+    </form>
 </body>
 </html>
